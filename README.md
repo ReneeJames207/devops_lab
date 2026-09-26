@@ -10,3 +10,4 @@ This repository contains my practical work and exercises for learning and practi
 - Git
 - GitHub
 - Docker
+- CI/CD
