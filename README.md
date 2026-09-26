@@ -4,9 +4,8 @@ This repository contains my practical work and exercises for learning and practi
 ## Badges
 ![workflow](https://github.com/ReneeJames207/devops_lab/actions/workflows/main.yml/badge.svg)
 
-[![GitHub release](https://img.shields.io/github/release/ReneeJames207/REPO.svg)](https://github.com/ReneeJames207/devops_lab/releases)
-
 ![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)
+
 [![GitHub release](https://img.shields.io/github/v/release/ReneeJames207/devops_lab?include_prereleases&sort=semver)](https://github.com/ReneeJames207/devops_lab/releases)
 
 # Software Engineering Methods
