@@ -1,4 +1,5 @@
 FROM eclipse-temurin:25
-COPY ./target/classes/com /tmp/com
+LABEL authors="Thin Nadi Oo"
+COPY ./target/semApp.jar /tmp/semApp.jar
 WORKDIR /tmp
-ENTRYPOINT ["java", "com.napier.sem.Main"]
+ENTRYPOINT ["java", "-jar", "semApp.jar"]
