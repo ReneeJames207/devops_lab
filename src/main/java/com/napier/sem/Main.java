@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * Main application.
@@ -144,16 +145,15 @@ public class Main
         // Connect to database
         a.connect();
 
-        // Get employee with ID 10001
-        Employee emp = a.getEmployee(10001);
+        // Extract employee salary information
+        AllSalaries allSalaries = new AllSalaries(a.con);
 
-        if (emp != null)
+        ArrayList<Employee> employees = allSalaries.getAllSalaries();
+
+        // Test the size of the returned data
+        if (employees != null)
         {
-            System.out.println(
-                    emp.emp_no + " "
-                            + emp.first_name + " "
-                            + emp.last_name
-            );
+            System.out.println(employees.size());
         }
 
         // Disconnect from database
