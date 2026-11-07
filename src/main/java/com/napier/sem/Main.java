@@ -1,3 +1,4 @@
+
 package com.napier.sem;
 
 import java.sql.Connection;
@@ -12,87 +13,68 @@ import java.util.ArrayList;
  */
 public class Main
 {
-    /**
-     * Connection to MySQL database.
-     */
     private Connection con = null;
 
     /**
      * Connect to the MySQL database.
      */
-    public void connect()
+    public void connect(String location, int delay)
     {
         try
         {
-            // Load database driver
             Class.forName("com.mysql.cj.jdbc.Driver");
         }
         catch (ClassNotFoundException e)
         {
             System.out.println("Could not load SQL driver");
-            System.exit(-1);
+            return;
         }
 
         int retries = 10;
 
-        for (int i = 0; i < retries; ++i)
+        for (int i = 0; i < retries; i++)
         {
             System.out.println("Connecting to database...");
 
             try
             {
-                // Wait a bit for database to start
-                Thread.sleep(30000);
+                Thread.sleep(delay);
 
-                // Connect to database
                 con = DriverManager.getConnection(
-                        "jdbc:mysql://db:3306/employees?allowPublicKeyRetrieval=true&useSSL=false",
+                        "jdbc:mysql://" + location +
+                                "/employees?allowPublicKeyRetrieval=true&useSSL=false",
                         "root",
                         "example"
                 );
 
                 System.out.println("Successfully connected");
-                break;
+                return;
             }
-            catch (SQLException sqle)
+            catch (SQLException e)
             {
-                System.out.println(
-                        "Failed to connect to database attempt " + i
-                );
-                System.out.println(sqle.getMessage());
+                System.out.println("Failed to connect to database attempt " + i);
+                System.out.println(e.getMessage());
             }
-            catch (InterruptedException ie)
+            catch (InterruptedException e)
             {
                 System.out.println("Thread interrupted.");
                 Thread.currentThread().interrupt();
-                break;
+                return;
             }
         }
     }
 
     /**
      * Get an employee from the database.
-     *
-     * @param ID Employee number
-     * @return Employee object, or null if not found.
      */
     public Employee getEmployee(int ID)
     {
-        try
+        String sql = "SELECT emp_no, first_name, last_name " +
+                "FROM employees WHERE emp_no = " + ID;
+
+        try (Statement stmt = con.createStatement();
+             ResultSet rset = stmt.executeQuery(sql))
         {
-            // Create an SQL statement
-            Statement stmt = con.createStatement();
-
-            // Create SQL query
-            String strSelect =
-                    "SELECT emp_no, first_name, last_name "
-                            + "FROM employees "
-                            + "WHERE emp_no = " + ID;
-
-            // Execute SQL statement
-            ResultSet rset = stmt.executeQuery(strSelect);
-
-            // Check whether an employee was returned
             if (rset.next())
             {
                 Employee emp = new Employee();
@@ -103,12 +85,10 @@ public class Main
 
                 return emp;
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
             System.out.println(e.getMessage());
             System.out.println("Failed to get employee details");
@@ -117,28 +97,42 @@ public class Main
     }
 
     /**
-     * Print parameters for a list of employees.
-     * @param employees List of employees to print
+     * Get all current employee salaries.
+     */
+    public ArrayList<Employee> getAllSalaries()
+    {
+        AllSalaries allSalaries = new AllSalaries(con);
+        return allSalaries.getAllSalaries();
+    }
+
+    /**
+     * Print salary information.
      */
     public void printSalaries(ArrayList<Employee> employees)
     {
-        // Check employees is not null
         if (employees == null)
         {
             System.out.println("No employees");
             return;
         }
-        // Print header
-        System.out.println(String.format("%-10s %-15s %-20s %-8s", "Emp No", "First Name", "Last Name", "Salary"));
-        // Loop over all employees in the list
+
+        System.out.println(
+                String.format("%-10s %-15s %-20s %-8s",
+                        "Emp No", "First Name", "Last Name", "Salary")
+        );
+
         for (Employee emp : employees)
         {
             if (emp == null)
                 continue;
-            String emp_string =
+
+            System.out.println(
                     String.format("%-10s %-15s %-20s %-8s",
-                            emp.emp_no, emp.first_name, emp.last_name, emp.salary);
-            System.out.println(emp_string);
+                            emp.emp_no,
+                            emp.first_name,
+                            emp.last_name,
+                            emp.salary)
+            );
         }
     }
 
@@ -152,10 +146,11 @@ public class Main
             try
             {
                 con.close();
+                System.out.println("Database disconnected");
             }
             catch (SQLException e)
             {
-                System.out.println("Error closing connection to database");
+                System.out.println("Error closing database connection");
             }
         }
     }
@@ -165,24 +160,21 @@ public class Main
      */
     public static void main(String[] args)
     {
-        // Create new application
         Main a = new Main();
 
-        // Connect to database
-        a.connect();
-
-        // Extract employee salary information
-        AllSalaries allSalaries = new AllSalaries(a.con);
-
-        ArrayList<Employee> employees = allSalaries.getAllSalaries();
-
-        // Test the size of the returned data
-        if (employees != null)
+        if (args.length >= 2)
         {
-            System.out.println(employees.size());
+            a.connect(args[0], Integer.parseInt(args[1]));
+        }
+        else
+        {
+            a.connect("db:3306", 30000);
         }
 
-        // Disconnect from database
+        ArrayList<Employee> employees = a.getAllSalaries();
+
+        a.printSalaries(employees);
+
         a.disconnect();
     }
 }
