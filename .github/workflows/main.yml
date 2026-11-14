@@ -24,8 +24,15 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Verify Java
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME"
+          java -version
+          javac -version
+          mvn -version
+
       - name: Unit Tests
-        run: mvn -Dtest=com.napier.devops.AppTest test
+        run: mvn -Dtest=com.napier.sem.MyTest test
 
   IntegrationTests:
     name: Integration Tests
@@ -43,11 +50,17 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Check Java Version
+        run: |
+          java -version
+          javac -version
+          mvn -version
+
       - name: Integration Tests
         run: |
           docker build -t database ./db
           docker run --name employees -dp 33060:3306 database
-          mvn -Dtest=com.napier.devops.AppIntegrationTest test
+          mvn -Dtest=com.napier.sem.AppIntegrationTest test
           docker stop employees
           docker rm employees
           docker image rm database
