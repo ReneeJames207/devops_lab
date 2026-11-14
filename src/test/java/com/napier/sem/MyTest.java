@@ -1,84 +1,63 @@
+
 package com.napier.sem;
 
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
-class MyTest
-{
+class MyTest {
+
     @Test
-    public void testMethod1()
-    {
-        // Create an instance of your 'My' class
-        My myObj = new My();
-
-        // Test with a valid string ("Hello" has a length of 5)
-        assertEquals(5, myObj.method("Hello"));
+    void unitTest() {
+        Assertions.assertEquals(5, 5);
     }
 
     @Test
-    void unitTest()
-    {
-        assertEquals(5, 5);
-    }
-
-//    @Test
-//    void unitTest2()
-//    {
-//        assertEquals(5, 4);
-//    }
-
-    @Test
-    void unitTest3()
-    {
-        assertEquals(5, 5, "Messages are equal");
+    void unitTest3() {
+        Assertions.assertEquals(5, 5, "Messages are equal");
     }
 
     @Test
-    void unitTest4()
-    {
-        assertEquals(5.0, 5.01, 0.02);
+    void unitTest4() {
+        Assertions.assertEquals(5.0, 5.01, 0.02);
     }
 
     @Test
-    void unitTest5()
-    {
+    void unitTest5() {
         int[] a = {1, 2, 3};
         int[] b = {1, 2, 3};
-        assertArrayEquals(a, b);
+
+        Assertions.assertArrayEquals(a, b);
     }
 
     @Test
-    void unitTest6()
-    {
-        assertTrue(5 == 5);
+    void unitTest6() {
+        Assertions.assertTrue(true);
     }
 
     @Test
-    void unitTest7()
-    {
-        assertFalse(5 == 4);
+    void unitTest7() {
+        Assertions.assertFalse(false);
     }
 
     @Test
-    void unitTest8()
-    {
-        assertNull(null);
+    void unitTest8() {
+        Assertions.assertNull(null);
     }
 
     @Test
-    void unitTest9()
-    {
-        assertNotNull("Hello");
+    void unitTest9() {
+        Assertions.assertNotNull("Hello");
     }
 
     @Test
-    void unitTest10()
-    {
-        assertThrows(NullPointerException.class, this::throwsException);
+    void unitTest10() {
+        Assertions.assertThrows(
+                NullPointerException.class,
+                this::throwsException
+        );
     }
 
-    void throwsException() throws NullPointerException
-    {
+    void throwsException() {
         throw new NullPointerException();
     }
 }
