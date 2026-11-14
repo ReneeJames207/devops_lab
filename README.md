@@ -8,7 +8,6 @@ This repository contains my practical work and exercises for learning and practi
 
 [![GitHub release](https://img.shields.io/github/v/release/ReneeJames207/devops_lab?include_prereleases&sort=semver)](https://github.com/ReneeJames207/devops_lab/releases)
 
-# Software Engineering Methods
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/ReneeJames207/devops_lab/main.yml?branch=develop)
 
 ## 🛠️ Tools & Technologies
