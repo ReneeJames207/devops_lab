@@ -31,7 +31,7 @@ jobs:
           mvn -version
 
       - name: Unit Tests
-        run: mvn -Dtest=com.napier.sem.MyTest test
+        run: mvn -Dtest=MyTest test
 
   IntegrationTests:
     name: Integration Tests
